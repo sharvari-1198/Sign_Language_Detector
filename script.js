@@ -9,6 +9,14 @@ const webcam = document.getElementById('webcam');
 const previewImage = document.getElementById('previewImage');
 const loading = document.getElementById('loading');
 
+// Class labels (index to letter)
+const labels = [
+  "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+  "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+  "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+  "U", "V", "W", "X", "Y", "Z"
+];
+
 // Show loading spinner when model is being loaded
 async function loadModel() {
   loading.classList.remove('hidden');  // Show loading spinner
@@ -65,7 +73,6 @@ function stopWebcam() {
 }
 
 // Predict from webcam feed
-// Predict from webcam feed
 async function predictCamera() {
   if (!isWebcamActive) return;
 
@@ -92,8 +99,10 @@ async function predictCamera() {
       if (res.ok) {
         const data = await res.json();
         console.log('Response data:', data); // Log the response for debugging
-        if (data.prediction) {
-          document.getElementById('cameraPrediction').innerText = `Prediction: ${data.prediction}`;
+        if (data.prediction !== undefined) {
+          // Assuming prediction is a number (index of the labels array)
+          const predictedLabel = labels[data.prediction];
+          document.getElementById('cameraPrediction').innerText = `Prediction: ${predictedLabel}`;
         } else {
           console.error('No prediction key in the response');
           document.getElementById('cameraPrediction').innerText = `Prediction: Error`;
@@ -109,7 +118,6 @@ async function predictCamera() {
   }, 1000); // predict every second
 }
 
-
 // Predict from uploaded image
 document.getElementById('imageInput').addEventListener('change', async (e) => {
   const file = e.target.files[0];
@@ -124,7 +132,14 @@ document.getElementById('imageInput').addEventListener('change', async (e) => {
       body: formData
     });
     const result = await response.json();
-    document.getElementById('uploadPrediction').innerText = `Prediction: ${result.prediction}`;
+
+    if (result.prediction !== undefined) {
+      // Assuming prediction is a number (index of the labels array)
+      const predictedLabel = labels[result.prediction];
+      document.getElementById('uploadPrediction').innerText = `Prediction: ${predictedLabel}`;
+    } else {
+      document.getElementById('uploadPrediction').innerText = `Prediction: Error`;
+    }
   } catch (err) {
     console.error('Upload prediction error:', err);
     document.getElementById('uploadPrediction').innerText = `Prediction: Error`;
