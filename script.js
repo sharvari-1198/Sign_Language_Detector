@@ -13,12 +13,18 @@ const loading = document.getElementById('loading');
 async function loadModel() {
   loading.classList.remove('hidden');  // Show loading spinner
   try {
-    // Load the model from GitHub directly or your storage URL
-    await fetch('https://your-github-url/model/model.json');
+    // Correct model path using raw GitHub URL
+    const modelUrl = 'https://raw.githubusercontent.com/sharvari-1198/Sign_Language_Detector/main/sign_language_model.pkl';  
+
+    const response = await fetch(modelUrl);
+    if (!response.ok) {
+      throw new Error(`Model failed to load with status: ${response.status}`);
+    }
+
     console.log("✅ Model loaded!");
   } catch (error) {
     console.error('Model loading error:', error);
-    alert("Error loading model");
+    alert("Error loading model: " + error.message);
   } finally {
     loading.classList.add('hidden');  // Hide loading spinner
   }
@@ -59,6 +65,7 @@ function stopWebcam() {
 }
 
 // Predict from webcam feed
+// Predict from webcam feed
 async function predictCamera() {
   if (!isWebcamActive) return;
 
@@ -77,17 +84,31 @@ async function predictCamera() {
     formData.append('image', blob, 'frame.jpg');
 
     try {
-      const res = await fetch('https://your-flask-api-url/predict', {
+      const res = await fetch('https://sign-language-detector-nine.vercel.app/predict', {
         method: 'POST',
         body: formData
       });
-      const data = await res.json();
-      document.getElementById('cameraPrediction').innerText = `Prediction: ${data.prediction}`;
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log('Response data:', data); // Log the response for debugging
+        if (data.prediction) {
+          document.getElementById('cameraPrediction').innerText = `Prediction: ${data.prediction}`;
+        } else {
+          console.error('No prediction key in the response');
+          document.getElementById('cameraPrediction').innerText = `Prediction: Error`;
+        }
+      } else {
+        console.error('Prediction request failed with status:', res.status);
+        document.getElementById('cameraPrediction').innerText = `Prediction: Error`;
+      }
     } catch (err) {
       console.error('Prediction error:', err);
+      document.getElementById('cameraPrediction').innerText = `Prediction: Error`;
     }
   }, 1000); // predict every second
 }
+
 
 // Predict from uploaded image
 document.getElementById('imageInput').addEventListener('change', async (e) => {
@@ -98,7 +119,7 @@ document.getElementById('imageInput').addEventListener('change', async (e) => {
   formData.append('image', file);
 
   try {
-    const response = await fetch('https://your-flask-api-url/predict', {
+    const response = await fetch('https://sign-language-detector-nine.vercel.app/predict', {
       method: 'POST',
       body: formData
     });
