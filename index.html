@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Language Detector</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+</head>
+<body>
+
+<div class="container">
+  <h1>Sign Language Detector</h1>
+
+  <div class="controls">
+    <button id="cameraBtn">📷 Camera</button>
+    <button id="uploadBtn">🖼️ Upload</button>
+  </div>
+
+  <div id="cameraSection" class="hidden">
+    <video id="webcam" autoplay playsinline></video>
+    <h2 id="cameraPrediction">Prediction: --</h2>
+  </div>
+
+  <div id="uploadSection" class="hidden">
+    <input type="file" id="imageInput" accept="image/*">
+    <img id="previewImage" />
+    <h2 id="uploadPrediction">Prediction: --</h2>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Loading Model...</p>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

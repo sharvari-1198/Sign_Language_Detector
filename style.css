@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  h1 {
+    margin-bottom: 30px;
+  }
+  
+  .controls {
+    margin-bottom: 30px;
+  }
+  
+  button {
+    background: #5a67d8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    margin: 0 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #434190;
+  }
+  
+  #webcam, #previewImage {
+    width: 320px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+  }
+  
+  h2 {
+    margin-top: 20px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* Loading Spinner */
+  .spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #5a67d8;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin: 20px auto;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+  }
+  
